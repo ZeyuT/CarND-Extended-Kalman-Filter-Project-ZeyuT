@@ -29,9 +29,16 @@ std::string hasData(std::string s) {
 int main()
 {
   uWS::Hub h;
-
+  
   // Create a Kalman Filter instance
   FusionEKF fusionEKF;
+  fusionEKF.ekf_.I_ = MatrixXd(4, 4);
+  fusionEKF.ekf_.I_ << 1, 0, 0, 0,
+				0, 1, 0, 0,
+				0, 0, 1, 0,
+				0, 0, 0, 1;
+
+  
 
   // used to compute the RMSE later
   Tools tools;
@@ -39,7 +46,7 @@ int main()
   vector<VectorXd> ground_truth;
 
   h.onMessage([&fusionEKF,&tools,&estimations,&ground_truth](uWS::WebSocket<uWS::SERVER> ws, char *data, size_t length, uWS::OpCode opCode) {
-    // "42" at the start of the message means there's a websocket message event.
+    // "42" at the start of the message means there's a websocket message event. 
     // The 4 signifies a websocket message
     // The 2 signifies a websocket event
 
